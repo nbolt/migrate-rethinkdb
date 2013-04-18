@@ -1,0 +1,2 @@
+module PostgresqlSimple ( migrate ) where
+
