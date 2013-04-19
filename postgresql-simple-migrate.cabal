@@ -1,7 +1,7 @@
 Name:                postgresql-simple-migrate
 Version:             0.1
 Synopsis:            postgresql-simple backend for migrate
-Description:            postgresql-simple backend for migrate
+Description:         postgresql-simple backend for migrate
 License:             WTFPL
 Author:              Chris Bolton
 Maintainer:          c@chrisbolton.me
@@ -12,10 +12,9 @@ Cabal-version:       >=1.2
 
 Library
   hs-source-dirs: src
-  exposed-modules:
-  other-modules:
-  build-depends:
-  extensions: OverloadedStrings
+  exposed-modules: Database.Migrate.PostgresqlSimple
+  build-depends: base, postgresql-simple, migrate
+  extensions: OverloadedStrings, GADTs
   ghc-options: -Wall
 
   source-repository head
