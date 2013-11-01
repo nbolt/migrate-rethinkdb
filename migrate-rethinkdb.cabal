@@ -1,7 +1,7 @@
-Name:                postgresql-simple-migrate
+Name:                migrate-rethinkdb
 Version:             0.1
-Synopsis:            postgresql-simple backend for migrate
-Description:         postgresql-simple backend for migrate
+Synopsis:            rethinkdb backend for migrate
+Description:         rethinkdb backend for migrate
 License:             WTFPL
 Author:              Chris Bolton
 Maintainer:          c@chrisbolton.me
@@ -12,16 +12,16 @@ Cabal-version:       >=1.2
 
 Library
   hs-source-dirs: src
-  exposed-modules: Database.Migrate.PostgresqlSimple
-  build-depends: base, postgresql-simple, migrate
+  exposed-modules: Database.Migrate.RethinkDB
+  build-depends: base, rethinkdb, migrate, aeson, unordered-containers, text, mtl
   extensions: OverloadedStrings, GADTs
   ghc-options: -Wall
 
   source-repository head
     type: git
-    location: http://github.com/saiko-chriskun/postgresql-simple-migrate
+    location: http://github.com/saiko-chriskun/migrate-rethinkdb
 
   source-repository this
     type: git
-    location: http://github.com/saiko-chriskun/postgresql-simple-migrate
+    location: http://github.com/saiko-chriskun/migrate-rethinkdb
     tag: v0.1
