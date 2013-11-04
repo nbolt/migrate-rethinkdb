@@ -4,8 +4,10 @@ module Database.Migrate.RethinkDB ( migrate, RethinkDBMigrate(..) ) where
 import qualified Data.HashMap.Strict as HM
 import           Data.Aeson.Types
 import qualified Data.Text as T
+import qualified Data.Vector as V
 import           Control.Applicative
 import qualified Database.RethinkDB as R
+import qualified Database.RethinkDB.Network as R
 import           Database.Migrate
 import           Control.Monad.State
 
@@ -35,7 +37,21 @@ instance Migratable RethinkDBMigrate where
                           else return False
 
     createTable = do
-        let table = R.Table Nothing "migrations" (Just "timestamp")
         h <- get
-        lift $ R.run' (handle h) (R.tableCreate table R.def)
-        return True
+        tables <- lift $ R.run' (handle h) $ R.tableList $ R.rdbDatabase $ handle h
+        let table = R.Table Nothing "migrations" (Just "timestamp")
+        if elem "migrations" $ concat $ map (\(R.JSON (Array a)) -> map (\(String n) -> T.unpack n) (V.toList a)) tables
+          then return True
+          else do
+            lift $ R.run' (handle h) (R.tableCreate table R.def)
+            return True
+
+    createDB = do
+        h   <- get
+        dbs <- liftIO $ R.run' (handle h) R.dbList
+        let dbName = T.unpack $ R.databaseName $ R.rdbDatabase $ handle h
+        if elem dbName $ concat $ map (\(R.JSON (Array a)) -> map (\(String n) -> T.unpack n) (V.toList a)) dbs
+          then return True
+          else do
+            lift $ R.run' (handle h) (R.dbCreate dbName)
+            return True
